@@ -1,17 +1,14 @@
-import { createServer } from 'node:http';
+import { createServer, ServerResponse } from 'node:http';
 import debug from 'debug';
 import { app } from './app.ts';
 import { env } from './env.ts';
+import type { HttpError } from './errors/http-error.ts';
 
 const log = debug('express-server:index');
 const port = env.PORT || 3040;
 
 const server = createServer(app);
 log('Server created');
-
-// server.listen(port, () => {
-//     log(`Server listening on port ${port}`);
-// });
 
 const listenManager = () => {
     const addr = server.address();
@@ -32,4 +29,21 @@ const listenManager = () => {
     }
 };
 
-server.listen(port, listenManager);
+const errorManager = (error: HttpError, response: ServerResponse) => {
+    if (!('statusCode' in error)) {
+        error = {
+            ...new Error('Internal Server Error'),
+            status: 500,
+            statusMessage: 'Internal Server Error',
+        };
+    }
+    const errorInfo = `Error ${error.status}: ${error.statusMessage}`;
+    response.statusCode = error.status;
+    response.statusMessage = error.statusMessage;
+    log(errorInfo, error.message);
+    response.end(errorInfo);
+};
+
+server.on('listening', listenManager);
+server.on('error', errorManager);
+server.listen(port);
