@@ -1,0 +1,22 @@
+{
+    "notes": [
+        {
+            "id": "1",
+            "content": "Primera nota"
+        },
+        {
+            "id": "2",
+            "content": "Segunda nota"
+        },
+        {
+            "content": "Nota creada",
+            "id": "df10700f-18ae-41ea-9e8e-16583023b8db",
+            "owner": "Pepe"
+        },
+        {
+            "content": "cosas de Pepe",
+            "id": "06cd5b1f-3e34-4c5f-81e9-fc10dac05fb1"
+        }
+    ],
+    "users": []
+}
