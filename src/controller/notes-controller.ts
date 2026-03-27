@@ -82,12 +82,22 @@ export class NotesController {
         return;
     };
 
-    delete = (req: Request, res: Response) => {
-        const { id } = req.params;
-        this.repo.deleteById(id as string);
-        res.status(204);
-        res.statusMessage = 'No Content';
-        res.end();
-        return;
+    delete = (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params;
+            this.repo.deleteById(id as string);
+            res.status(204);
+            res.statusMessage = 'No Content';
+            res.end();
+            return;
+        } catch (error) {
+            const finalError = new HttpError(
+                404,
+                'Not Found',
+                (error as Error).message,
+            );
+            finalError.cause = error;
+            next(finalError);
+        }
     };
 }

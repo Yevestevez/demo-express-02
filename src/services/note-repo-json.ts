@@ -1,14 +1,20 @@
 import { readFile, writeFile } from 'node:fs/promises';
+import debug from 'debug';
+
 import type { Note, NoteDTO } from '../schemas/note.ts';
 import type { Repository } from '../types/repo.ts';
+import { configDB } from '../config/db-config.ts';
+
+const log = debug('express-server:repo:notes');
 
 export class NotesRepoJson implements Repository<Note> {
     #notes: Note[] = [];
     #file: string;
     #collection: string;
 
-    constructor(file: string, collection = 'notes') {
-        this.#file = file;
+    constructor(collection = 'notes') {
+        log('NotesRepoJson created');
+        this.#file = configDB();
         this.#collection = collection;
     }
 

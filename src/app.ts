@@ -2,8 +2,11 @@ import express from 'express';
 import debug from 'debug';
 import morgan from 'morgan';
 import cors from 'cors';
+
 import { errorHandler } from './middleware/error-handler.ts';
 import notesRouter from './router/notes-router.ts';
+import { NotesController } from './controller/notes-controller.ts';
+import { NotesRepoJson } from './services/note-repo-json.ts';
 
 const log = debug('express-server:app');
 
@@ -22,7 +25,10 @@ app.get('/', (_req, res) => {
     return;
 });
 
-app.use('/api/notes', notesRouter);
+const repo = new NotesRepoJson();
+const controller = new NotesController(repo);
+
+app.use('/api/notes', notesRouter(controller));
 
 app.post('/', (req, res) => {
     log(req.body);
