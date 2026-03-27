@@ -7,6 +7,7 @@ import { errorHandler } from './middleware/error-handler.ts';
 import notesRouter from './router/notes-router.ts';
 import { NotesController } from './controller/notes-controller.ts';
 import { NotesRepoJson } from './services/note-repo-json.ts';
+import { HomeView } from './views/home.ts';
 
 const log = debug('express-server:app');
 
@@ -27,6 +28,10 @@ app.get('/', (_req, res) => {
 
 const repo = new NotesRepoJson();
 const controller = new NotesController(repo);
+
+app.use('/home', (_req, res) => {
+    res.send(HomeView.render());
+});
 
 app.use('/api/notes', notesRouter(controller));
 

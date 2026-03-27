@@ -141,3 +141,6 @@ vite.config.ts.timestamp-*
 
 # VSCode config
 .vscode
+
+# HTML view format helper
+.html-format-helper.html
