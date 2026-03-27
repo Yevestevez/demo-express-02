@@ -60,7 +60,7 @@ export class NotesController {
     update = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
-            const data = req.body;
+            const data = NoteSchemaDTO.parse(req.body);
             const result = await this.repo.updateById(id as string, data);
             res.json(result);
             return;

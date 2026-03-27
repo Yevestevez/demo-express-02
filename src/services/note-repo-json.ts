@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import debug from 'debug';
 
-import type { Note, NoteDTO } from '../schemas/note.ts';
+import type { Note, NoteDTO, NoteUpdateDTO } from '../schemas/note.ts';
 import type { Repository } from '../types/repo.ts';
 import { configDB } from '../config/db-config.ts';
 
@@ -51,10 +51,7 @@ export class NotesRepoJson implements Repository<Note> {
         return note;
     }
 
-    async updateById(
-        id: string,
-        data: Omit<Partial<Note>, 'id'>,
-    ): Promise<Note> {
+    async updateById(id: string, data: NoteUpdateDTO): Promise<Note> {
         const note = await this.readById(id);
         Object.assign(note, data);
         await this.save();
